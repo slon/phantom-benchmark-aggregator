@@ -2,3 +2,4 @@ deps/*
 lib/phantom/*
 *~
 *.o
+.sconsign.dblite
