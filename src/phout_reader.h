@@ -24,7 +24,7 @@ public:
           rpos(0),
           wpos(0),
           line_size(0),
-          buffer(4 * 1024 * 1024) {}
+          buffer(64 * 1024 * 1024) {}
 
     bool readline(char** line);
 

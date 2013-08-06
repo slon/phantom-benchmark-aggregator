@@ -85,13 +85,13 @@ void stats_t::print(std::ostream& out) {
 
     out << "\"resps\": " << resps << ", ";
 
-    out << "\"overall_time\": " << overall_time.mean() / 1000 << ", ";
-    out << "\"connect_time\": " << connect_time.mean() / 1000 << ", ";
-    out << "\"send_time\": " << send_time.mean() / 1000 << ", ";
-    out << "\"latency\": " << latency.mean() / 1000 << ", ";
-    out << "\"receive_time\": " << receive_time.mean() / 1000 << ", ";
+    out << "\"overall_time\": " << overall_time.mean() << ", ";
+    out << "\"connect_time\": " << connect_time.mean() << ", ";
+    out << "\"send_time\": " << send_time.mean() << ", ";
+    out << "\"latency\": " << latency.mean() << ", ";
+    out << "\"receive_time\": " << receive_time.mean() << ", ";
 
-    out << "\"disper\": " << overall_time.variance() / 1000000 << ", ";
+    out << "\"disper\": " << overall_time.variance() << ", ";
 
     out << "\"input\": " << input << ", ";
     out << "\"output\": " << output << ", ";

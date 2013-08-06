@@ -35,10 +35,10 @@ bool line_reader_t::readline(char** line) {
 int line_reader_t::read_some() {
     if(rpos != wpos) {
         memmove(buffer.data(), buffer.data() + rpos, wpos - rpos);
-
-        wpos -= rpos;
-        rpos = 0;
     }
+
+    wpos -= rpos;
+    rpos = 0;
 
     int res = read(fd, buffer.data() + wpos, buffer.size() - wpos);
 
@@ -94,6 +94,15 @@ void phout_reader_t::parse_line(char* line,
 
     sscanf(get_token(&line), "%d", &(result->err));
     sscanf(get_token(&line), "%d", &(result->proto_code));
+
+    // convert to milliseconds
+    result->total_time /= 1000;
+    result->conn_time /= 1000;
+    result->send_time /= 1000;
+    result->latency /= 1000;
+    result->recv_time /= 1000;
+
+    result->interval_event /= 1000;
 }
 
 
