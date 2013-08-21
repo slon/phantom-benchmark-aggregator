@@ -126,22 +126,10 @@ char* phout_reader_t::get_token(char** line) {
     return start;
 }
 
+sig_atomic_t stop_phantom_aggregator;
+
 bool phout_reader_t::log_writer_stopped() {
-    int res = flock(fd, LOCK_EX | LOCK_NB);
-    bool stopped;
-
-    if(res == 0) {
-        stopped = true;
-
-        if(-1 == flock(fd, LOCK_UN))
-            err(4, NULL);
-    } else if(errno == EWOULDBLOCK) {
-        stopped = false;
-    } else {
-        err(3, NULL);
-    }
-
-    return stopped;
+    return stop_phantom_aggregator;
 }
 
 phout_reader_t::~phout_reader_t() {

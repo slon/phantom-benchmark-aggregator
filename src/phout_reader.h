@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <csignal>
 
 struct result_t {
     double time;
@@ -38,6 +39,8 @@ private:
     int rpos, wpos, line_size;
     std::vector<char> buffer;
 };
+
+extern sig_atomic_t stop_phantom_aggregator;
 
 class phout_reader_t {
 public:
