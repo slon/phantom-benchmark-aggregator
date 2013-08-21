@@ -9,9 +9,13 @@
 #include <fcntl.h>
 
 #include <iostream>
+#include <stdexcept>
 
 bool line_reader_t::readline(char** line) {
     while(true) {
+        if(line_size > 16 * 1024)
+            throw std::runtime_error("line size is greater than 16K");
+
         // end of buffer, no '\n' found, read more bytes
         if(rpos + line_size == wpos && read_some() == 0) {
             return false;
@@ -78,22 +82,23 @@ bool phout_reader_t::read(result_t* result) {
 
 void phout_reader_t::parse_line(char* line,
                                 result_t* result) {
-    sscanf(get_token(&line), "%lf", &(result->time));
+    result->time = atof(get_token(&line));
+
     result->tag = std::string(get_token(&line));
 
-    sscanf(get_token(&line), "%d", &(result->total_time));
-    sscanf(get_token(&line), "%d", &(result->conn_time));
-    sscanf(get_token(&line), "%d", &(result->send_time));
-    sscanf(get_token(&line), "%d", &(result->latency));
-    sscanf(get_token(&line), "%d", &(result->recv_time));
+    result->total_time = atoi(get_token(&line));
+    result->conn_time = atoi(get_token(&line));
+    result->send_time = atoi(get_token(&line));
+    result->latency = atoi(get_token(&line));
+    result->recv_time = atoi(get_token(&line));
 
-    sscanf(get_token(&line), "%d", &(result->interval_event));
+    result->interval_event = atoi(get_token(&line));
 
-    sscanf(get_token(&line), "%d", &(result->size_out));
-    sscanf(get_token(&line), "%d", &(result->size_in));
+    result->size_out = atoi(get_token(&line));
+    result->size_in = atoi(get_token(&line));
 
-    sscanf(get_token(&line), "%d", &(result->err));
-    sscanf(get_token(&line), "%d", &(result->proto_code));
+    result->err = atoi(get_token(&line));
+    result->proto_code = atoi(get_token(&line));
 
     // convert to milliseconds
     result->total_time /= 1000;

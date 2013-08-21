@@ -1,6 +1,7 @@
 #include "stats.h"
 
 #include <vector>
+#include <cmath>
 
 void mean_counter_t::count(int value) {
     ++n_samples;
@@ -73,7 +74,7 @@ void histogram_counter_t::print_quantiles(std::ostream& out) {
             ++point;
         }
 
-        out << "\"" << quantile << "\": " << static_cast<double>(point->first) / 1000;
+        out << "\"" << quantile << "\": " << point->first;
         preceding_coma = true;
     }
 
@@ -91,7 +92,7 @@ void stats_t::print(std::ostream& out) {
     out << "\"latency\": " << latency.mean() << ", ";
     out << "\"receive_time\": " << receive_time.mean() << ", ";
 
-    out << "\"disper\": " << overall_time.variance() << ", ";
+    out << "\"disper\": " << std::sqrt(std::max(overall_time.variance(), 0.0)) << ", ";
 
     out << "\"input\": " << input << ", ";
     out << "\"output\": " << output << ", ";
@@ -131,12 +132,15 @@ void stats_t::count(const result_t& result) {
 void full_stats_t::count(const result_t& result) {
     int second = result.time;
 
-    if(second > this_second) {
-        if(this_second != -1)
-            print();
+	if(this_second == -1) {
+		this_second = second;
+	}
+
+    while(second > this_second) {
+		print();
+		++this_second;
 
         overall = stats_t();
-        this_second = second;
         results_in_this_second = 0;
     }
 
